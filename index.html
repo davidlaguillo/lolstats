@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas de Jugadores</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .player {
+            background: #1E1E1E;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid white;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 Estadísticas de Jugadores</h1>
+    <div class="container" id="statsContainer"></div>
+
+    <script>
+        async function cargarEstadisticas() {
+            const response = await fetch("stats.json");
+            const data = await response.json();
+            const container = document.getElementById("statsContainer");
+
+            Object.keys(data).forEach(jugador => {
+                const stats = data[jugador];
+
+                // Crear div para cada jugador
+                const playerDiv = document.createElement("div");
+                playerDiv.classList.add("player");
+
+                // Crear HTML para mostrar estadísticas
+                playerDiv.innerHTML = `
+                    <h2>${jugador}</h2>
+                    <table>
+                        <tr><th>Métrica</th><th>Valor</th></tr>
+                        <tr><td>CS/Min</td><td>${stats.cs_min_promedio}</td></tr>
+                        <tr><td>Daño/Min</td><td>${stats.dmg_min_promedio}</td></tr>
+                        <tr><td>KDA</td><td>${stats.kda_promedio}</td></tr>
+                        <tr><td>Winrate</td><td>${stats.winrate}%</td></tr>
+                        <tr><td>Kills/Partida</td><td>${stats.kills_promedio}</td></tr>
+                        <tr><td>Muertes/Partida</td><td>${stats.deaths_promedio}</td></tr>
+                        <tr><td>Asistencias/Partida</td><td>${stats.assists_promedio}</td></tr>
+                        <tr><td>Vision Score</td><td>${stats.vision_score_promedio}</td></tr>
+                        <tr><td>Placas Tomadas</td><td>${stats.placas_promedio}</td></tr>
+                    </table>
+                    <canvas id="chart-${jugador}"></canvas>
+                `;
+
+                container.appendChild(playerDiv);
+
+                // Crear gráfico de roles
+                const ctx = document.getElementById(`chart-${jugador}`).getContext("2d");
+                const roles = Object.keys(stats.porcentaje_roles);
+                const partidas = roles.map(rol => stats.porcentaje_roles[rol][0]); // Cantidad de partidas
+
+                new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: roles,
+                        datasets: [{
+                            label: "Cantidad de partidas por rol",
+                            data: partidas,
+                            backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            });
+        }
+
+        cargarEstadisticas();
+    </script>
+</body>
+</html>
