@@ -6,7 +6,6 @@
     <title>📊 Estadísticas de Jugadores</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ====== ESTILOS GENERALES ====== */
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #1e1e2f, #121212);
@@ -19,40 +18,32 @@
         h1 {
             margin: 20px 0;
             font-size: 2.5rem;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.2);
         }
 
         .container {
             width: 90%;
-            max-width: 1000px;
+            max-width: 800px;
             margin: auto;
         }
 
-        /* ====== TARJETA DE JUGADOR ====== */
+        select {
+            padding: 10px;
+            font-size: 1rem;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+
         .player {
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
-            margin: 20px 0;
+            margin-top: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
         }
 
-        .player:hover {
-            transform: scale(1.02);
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: #ffcc00;
-        }
-
-        /* ====== TABLA ESTADÍSTICAS ====== */
         table {
             width: 100%;
-            border-collapse: collapse;
             margin-top: 10px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 8px;
@@ -60,21 +51,11 @@
         }
 
         th, td {
-            padding: 12px;
+            padding: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             text-align: left;
         }
 
-        th {
-            background: rgba(255, 255, 255, 0.1);
-            font-weight: bold;
-        }
-
-        td {
-            font-size: 1rem;
-        }
-
-        /* ====== GRÁFICO ====== */
         canvas {
             margin-top: 20px;
             max-width: 100%;
@@ -83,23 +64,36 @@
 </head>
 <body>
     <h1>📊 Estadísticas de Jugadores</h1>
-    <div class="container" id="statsContainer"></div>
+    <div class="container">
+        <select id="playerSelect"></select>
+        <div id="statsContainer"></div>
+    </div>
 
     <script>
+        let data;
+        let currentChart;
+
         async function cargarEstadisticas() {
             const response = await fetch("stats.json");
-            const data = await response.json();
-            const container = document.getElementById("statsContainer");
-
+            data = await response.json();
+            const select = document.getElementById("playerSelect");
+            
             Object.keys(data).forEach(jugador => {
-                const stats = data[jugador];
+                const option = document.createElement("option");
+                option.value = jugador;
+                option.textContent = jugador;
+                select.appendChild(option);
+            });
+            
+            select.addEventListener("change", () => mostrarJugador(select.value));
+            mostrarJugador(select.value);
+        }
 
-                // Crear tarjeta de jugador
-                const playerDiv = document.createElement("div");
-                playerDiv.classList.add("player");
-
-                // Crear HTML con estadísticas
-                playerDiv.innerHTML = `
+        function mostrarJugador(jugador) {
+            const stats = data[jugador];
+            const container = document.getElementById("statsContainer");
+            container.innerHTML = `
+                <div class="player">
                     <h2>${jugador}</h2>
                     <table>
                         <tr><th>Métrica</th><th>Valor</th></tr>
@@ -113,45 +107,49 @@
                         <tr><td>Vision Score</td><td>${stats.vision_score_promedio.toFixed(2)}</td></tr>
                         <tr><td>Placas Tomadas</td><td>${stats.placas_promedio.toFixed(2)}</td></tr>
                     </table>
-                    <canvas id="chart-${jugador}"></canvas>
-                `;
+                    <canvas id="chartRoles"></canvas>
+                </div>
+            `;
+            mostrarGrafico(stats);
+        }
 
-                container.appendChild(playerDiv);
-
-                // Crear gráfico de roles
-                const ctx = document.getElementById(`chart-${jugador}`).getContext("2d");
-                const roles = Object.keys(stats.porcentaje_roles);
-                const partidas = roles.map(rol => stats.porcentaje_roles[rol][0]); // Cantidad de partidas
-                const porcentajes = roles.map(rol => (stats.porcentaje_roles[rol][1] * 100).toFixed(1)); // Porcentajes
-
-                new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: roles,
-                        datasets: [{
-                            label: "Cantidad de partidas por rol",
-                            data: partidas,
-                            backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff"],
-                            borderColor: "white",
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function (tooltipItem) {
-                                        return `${partidas[tooltipItem.dataIndex]} partidas (${porcentajes[tooltipItem.dataIndex]}%)`;
-                                    }
+        function mostrarGrafico(stats) {
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            
+            const ctx = document.getElementById("chartRoles").getContext("2d");
+            const roles = Object.keys(stats.porcentaje_roles);
+            const partidas = roles.map(rol => stats.porcentaje_roles[rol][0]);
+            const porcentajes = roles.map(rol => (stats.porcentaje_roles[rol][1] * 100).toFixed(1));
+            
+            currentChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: roles,
+                    datasets: [{
+                        label: "Partidas por rol",
+                        data: partidas,
+                        backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff"],
+                        borderColor: "white",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return `${partidas[tooltipItem.dataIndex]} partidas (${porcentajes[tooltipItem.dataIndex]}%)`;
                                 }
                             }
-                        },
-                        scales: {
-                            y: { beginAtZero: true }
                         }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
                     }
-                });
+                }
             });
         }
 
