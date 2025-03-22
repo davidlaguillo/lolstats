@@ -1,0 +1,167 @@
+{
+    "Ðαvıd": {
+        "cs_min_promedio": 4.52,
+        "dmg_min_promedio": 967.51,
+        "kda_promedio": 2.87,
+        "winrate": 49.66,
+        "kills_promedio": 9.28,
+        "deaths_promedio": 8.69,
+        "assists_promedio": 11.6,
+        "vision_score_promedio": 24.82,
+        "placas_promedio": 1.68,
+        "porcentaje_roles": {
+            "top": [
+                33,
+                0.22
+            ],
+            "jungla": [
+                33,
+                0.22
+            ],
+            "mid": [
+                26,
+                0.17
+            ],
+            "adc": [
+                28,
+                0.19
+            ],
+            "supp": [
+                29,
+                0.19
+            ]
+        }
+    },
+    "hŸergøtz": {
+        "cs_min_promedio": 4.68,
+        "dmg_min_promedio": 463.02,
+        "kda_promedio": 2.33,
+        "winrate": 49.66,
+        "kills_promedio": 3.14,
+        "deaths_promedio": 7.01,
+        "assists_promedio": 9.11,
+        "vision_score_promedio": 28.11,
+        "placas_promedio": 1.02,
+        "porcentaje_roles": {
+            "top": [
+                36,
+                0.24
+            ],
+            "jungla": [
+                28,
+                0.19
+            ],
+            "mid": [
+                25,
+                0.17
+            ],
+            "adc": [
+                29,
+                0.19
+            ],
+            "supp": [
+                30,
+                0.2
+            ]
+        }
+    },
+    "Tiniebler": {
+        "cs_min_promedio": 4.34,
+        "dmg_min_promedio": 635.11,
+        "kda_promedio": 3.92,
+        "winrate": 49.66,
+        "kills_promedio": 6.48,
+        "deaths_promedio": 6.33,
+        "assists_promedio": 10.61,
+        "vision_score_promedio": 19.6,
+        "placas_promedio": 1.46,
+        "porcentaje_roles": {
+            "top": [
+                26,
+                0.17
+            ],
+            "jungla": [
+                36,
+                0.24
+            ],
+            "mid": [
+                22,
+                0.15
+            ],
+            "adc": [
+                19,
+                0.13
+            ],
+            "supp": [
+                46,
+                0.31
+            ]
+        }
+    },
+    "Isagi Yoichi": {
+        "cs_min_promedio": 6.54,
+        "dmg_min_promedio": 1009.1,
+        "kda_promedio": 3.75,
+        "winrate": 49.66,
+        "kills_promedio": 9.51,
+        "deaths_promedio": 6.69,
+        "assists_promedio": 9.35,
+        "vision_score_promedio": 16.74,
+        "placas_promedio": 2.32,
+        "porcentaje_roles": {
+            "top": [
+                28,
+                0.19
+            ],
+            "jungla": [
+                25,
+                0.17
+            ],
+            "mid": [
+                32,
+                0.21
+            ],
+            "adc": [
+                46,
+                0.31
+            ],
+            "supp": [
+                18,
+                0.12
+            ]
+        }
+    },
+    "Ruined Soul": {
+        "cs_min_promedio": 4.82,
+        "dmg_min_promedio": 713.57,
+        "kda_promedio": 2.01,
+        "winrate": 49.66,
+        "kills_promedio": 6.99,
+        "deaths_promedio": 8.83,
+        "assists_promedio": 8.19,
+        "vision_score_promedio": 17.19,
+        "placas_promedio": 1.4,
+        "porcentaje_roles": {
+            "top": [
+                26,
+                0.17
+            ],
+            "jungla": [
+                27,
+                0.18
+            ],
+            "mid": [
+                44,
+                0.3
+            ],
+            "adc": [
+                26,
+                0.17
+            ],
+            "supp": [
+                26,
+                0.17
+            ]
+        }
+    }
+}
